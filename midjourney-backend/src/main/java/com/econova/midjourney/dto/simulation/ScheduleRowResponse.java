@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 public record ScheduleRowResponse(
         int month,
+        String paymentDate,
         String graceType,
         BigDecimal openingBalance,
         BigDecimal interest,

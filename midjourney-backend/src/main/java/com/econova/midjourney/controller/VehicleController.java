@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -16,12 +17,17 @@ public class VehicleController {
     private final VehicleService vehicleService;
 
     /**
-     * US-003: Listar catálogo de vehículos disponibles.
-     * GET /api/vehicles
+     * US-003: Listar/buscar catálogo de vehículos.
+     * GET /api/vehicles?search=toyota&maxPrice=30000
      */
     @GetMapping
-    public ResponseEntity<List<Vehicle>> getAllVehicles() {
-        return ResponseEntity.ok(vehicleService.findAll());
+    public ResponseEntity<List<Vehicle>> getAllVehicles(
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) BigDecimal maxPrice) {
+        if (search == null && maxPrice == null) {
+            return ResponseEntity.ok(vehicleService.findAll());
+        }
+        return ResponseEntity.ok(vehicleService.search(search, maxPrice));
     }
 
     /**

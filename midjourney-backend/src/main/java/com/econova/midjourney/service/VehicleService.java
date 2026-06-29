@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -20,6 +21,18 @@ public class VehicleService {
      */
     public List<Vehicle> findAll() {
         return vehicleRepository.findAll();
+    }
+
+    /**
+     * US-003: Buscar vehículos por texto (marca/modelo) y precio máximo.
+     */
+    public List<Vehicle> search(String query, BigDecimal maxPrice) {
+        return vehicleRepository.findAll().stream()
+                .filter(v -> query == null || query.isBlank()
+                        || v.getBrand().toLowerCase().contains(query.toLowerCase())
+                        || v.getModel().toLowerCase().contains(query.toLowerCase()))
+                .filter(v -> maxPrice == null || v.getPrice().compareTo(maxPrice) <= 0)
+                .toList();
     }
 
     /**

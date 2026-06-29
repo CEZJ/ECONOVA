@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -83,9 +84,10 @@ public class SimulationService {
         );
 
         // 7. Generar cronograma de amortización (US-009, US-010, US-015)
+        LocalDate startDate = request.startDate() != null ? request.startDate() : LocalDate.now();
         List<ScheduleRowResponse> schedule = amortizationService.generateSchedule(
                 financedAmount, balloonAmount, tem, request.termMonths(),
-                installment, request.vehiclePrice(), graceType, gracePeriodCount
+                installment, request.vehiclePrice(), graceType, gracePeriodCount, startDate
         );
 
         // 8. Extraer flujos de caja para VAN y TIR

@@ -6,6 +6,8 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,12 +47,15 @@ public class AmortizationService {
             BigDecimal installment,
             BigDecimal vehiclePrice,
             GraceType graceType,
-            int gracePeriodCount
+            int gracePeriodCount,
+            LocalDate startDate
     ) {
         List<ScheduleRowResponse> schedule = new ArrayList<>();
         BigDecimal balance = financedAmount;
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         for (int month = 1; month <= termMonths; month++) {
+            String paymentDate = startDate.plusMonths(month).format(fmt);
             boolean isGracePeriod = month <= gracePeriodCount;
             boolean isLastMonth = month == termMonths;
 
@@ -110,6 +115,7 @@ public class AmortizationService {
 
             schedule.add(new ScheduleRowResponse(
                     month,
+                    paymentDate,
                     graceLabel,
                     // Opening balance = balance antes de amortizar este mes
                     isGracePeriod && graceType == GraceType.TOTAL

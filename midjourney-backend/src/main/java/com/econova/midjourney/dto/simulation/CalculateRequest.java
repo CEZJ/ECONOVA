@@ -1,9 +1,11 @@
 package com.econova.midjourney.dto.simulation;
 
+import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 public record CalculateRequest(
 
@@ -31,6 +33,7 @@ public record CalculateRequest(
 
         @NotNull(message = "El porcentaje Balloon es obligatorio")
         @DecimalMin(value = "20.0", message = "El porcentaje Balloon mínimo es 20%")
+        @DecimalMax(value = "40.0", message = "El porcentaje Balloon máximo es 40%")
         BigDecimal balloonPercent,
 
         @NotNull(message = "El COK anual es obligatorio")
@@ -39,6 +42,8 @@ public record CalculateRequest(
 
         Integer gracePeriodCount,
 
-        String graceType // "TOTAL", "PARCIAL", "SIN_GRACIA"
+        String graceType, // "TOTAL", "PARCIAL", "SIN_GRACIA"
+
+        LocalDate startDate // Fecha de inicio del cronograma (por defecto: hoy)
 ) {
 }

@@ -1,0 +1,3 @@
+com\econova\midjourney\controller\SimulationControllerIntegrationTest.class
+com\econova\midjourney\controller\AuthControllerIntegrationTest.class
+com\econova\midjourney\service\finance\FinancialEngineTest.class
